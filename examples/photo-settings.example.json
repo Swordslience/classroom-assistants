@@ -1,0 +1,10 @@
+{
+  "Provider": "DeepSeek",
+  "DeepSeekApiKey": "",
+  "DeepSeekModel": "deepseek-flash",
+  "DoubaoApiKey": "",
+  "DoubaoModel": "doubao-seed-2-0-mini-260428",
+  "VoiceApiKey": "",
+  "VoiceSpeaker": "zh_female_vv_uranus_bigtts",
+  "DailyLimit": 80
+}

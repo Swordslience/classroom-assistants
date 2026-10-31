@@ -1,0 +1,57 @@
+{
+  "runtime": "PP-OCRv6-tiny-RapidOcrNet-4.2.0-win-x64",
+  "zipBytes": 23338138,
+  "zipSha256": "8a98d45e6b5787eef8c5ba8884fe5cb6f5c9cf79c8b65328c39b936e126c5e12",
+  "files": [
+    {
+      "name": "PhotoTutor.LocalOcr.exe",
+      "bytes": 21700378,
+      "sha256": "38499b7f61663a13ff2f288f588ec3f816fd1da49647d261a1720641ac42c822"
+    },
+    {
+      "name": "models/v5/ch_PP-LCNet_x0_25_textline_ori_cls_mobile.onnx",
+      "bytes": 1018508,
+      "sha256": "54379ae5174d026780215fc748a7f31910dee36818e63d49e17dc598ecc82df7"
+    },
+    {
+      "name": "models/v6/PP-OCRv6_det_tiny.onnx",
+      "bytes": 1829618,
+      "sha256": "f42c0fbd294d95eac1a550e131b277dac97462c8025fa4b6c3cec1b7894bd3d5"
+    },
+    {
+      "name": "models/v6/PP-OCRv6_rec_tiny.onnx",
+      "bytes": 4489813,
+      "sha256": "e16e242de5937ad92609223f19bc2aff3727ee40b095f996907c24749bad251b"
+    },
+    {
+      "name": "models/v6/ppocrv6_tiny_dict.txt",
+      "bytes": 27156,
+      "sha256": "c5cbe34ef40c29c4df07ed012bf96569cb69a2d2a01a07027e9f13cb832bd9cd"
+    },
+    {
+      "name": "THIRD-PARTY-NOTICES.txt",
+      "bytes": 1292655,
+      "sha256": "b784864bff26a53597004c6a66527275a5b1c091d0e5e98231b4e5b7705fdc57"
+    }
+  ],
+  "noticeSources": [
+    "Clipper2/2.0.0/License.txt",
+    "Microsoft.ML.OnnxRuntime/1.29.0/LICENSE",
+    "Microsoft.ML.OnnxRuntime/1.29.0/ThirdPartyNotices.txt",
+    "Microsoft.ML.OnnxRuntime.Managed/1.29.0/LICENSE.txt",
+    "Microsoft.ML.OnnxRuntime.Managed/1.29.0/ThirdPartyNotices.txt",
+    "Microsoft.NET.ILLink.Tasks/8.0.32/LICENSE.TXT",
+    "Microsoft.NET.ILLink.Tasks/8.0.32/THIRD-PARTY-NOTICES.TXT",
+    "SkiaSharp/3.119.1/LICENSE.txt",
+    "SkiaSharp.NativeAssets.Linux.NoDependencies/3.119.1/LICENSE.txt",
+    "SkiaSharp.NativeAssets.Linux.NoDependencies/3.119.1/THIRD-PARTY-NOTICES.txt",
+    "SkiaSharp.NativeAssets.macOS/3.119.1/LICENSE.txt",
+    "SkiaSharp.NativeAssets.macOS/3.119.1/THIRD-PARTY-NOTICES.txt",
+    "SkiaSharp.NativeAssets.Win32/3.119.1/LICENSE.txt",
+    "SkiaSharp.NativeAssets.Win32/3.119.1/THIRD-PARTY-NOTICES.txt",
+    "System.Memory/4.5.5/LICENSE.TXT",
+    "System.Memory/4.5.5/THIRD-PARTY-NOTICES.TXT",
+    "System.Numerics.Tensors/9.0.0/LICENSE.TXT",
+    "System.Numerics.Tensors/9.0.0/THIRD-PARTY-NOTICES.TXT"
+  ]
+}
