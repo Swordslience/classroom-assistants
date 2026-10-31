@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>ClassroomAI.Seewo</AssemblyName>
+    <Product>奶龙课堂助教</Product>
+    <Description>教师端生图与语音对话原生插件，本机小范围验证。</Description>
+    <Author>ClassroomAI Local</Author>
+    <Company>ClassroomAI Local</Company>
+    <Version>0.4.19</Version>
+    <IncludePrivateDeployment>false</IncludePrivateDeployment>
+    <UseEasiNote>core</UseEasiNote>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>obj\generated</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="课堂提问规则.md" TargetPath="classroom-question-rules.md" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="classroom-deployment.json" CopyToOutputDirectory="PreserveNewest" Condition="Exists('classroom-deployment.json') and '$(IncludePrivateDeployment)' != 'false'" />
+    <PackageReference Include="dotnetCampus.EasiPlugin.Sdk" Version="2.1.1-alpha.3" />
+    <PackageReference Include="System.Speech" Version="6.0.0" />
+    <PackageReference Include="WpfMath" Version="2.1.0" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
+    <Compile Include="..\SharedImage.cs" Link="SharedImage.cs" />
+    <Content Include="..\..\PhotoTutor\CloudUpdates\bin\Release\net48\课堂助教更新.exe" Link="课堂助教更新.exe" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="..\CloudUpdateLauncher.cs" Link="CloudUpdateLauncher.cs" />
+    <Compile Include="..\CloudMath.cs" Link="CloudMath.cs" />
+    <Compile Include="..\ScienceSupport.cs" Link="ScienceSupport.cs" />
+  </ItemGroup>
+</Project>

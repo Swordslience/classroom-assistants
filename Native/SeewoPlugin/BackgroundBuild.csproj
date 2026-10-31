@@ -1,0 +1,6 @@
+<Project>
+  <Import Project="ClassroomAI.Seewo.csproj" />
+  <!-- Explicitly skip the SDK's development install hooks for background builds. -->
+  <Target Name="_ENSdkPrepareForDebugee" />
+  <Target Name="_ENSdkInstallEasiPlugin" />
+</Project>

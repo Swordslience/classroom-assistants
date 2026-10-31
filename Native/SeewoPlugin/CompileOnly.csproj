@@ -1,0 +1,8 @@
+<Project>
+  <Import Project="ClassroomAI.Seewo.csproj" />
+  <!-- This review build must never register, pack, install or redirect the running Seewo plugin. -->
+  <Target Name="ENSdkPrepareForDebugee" />
+  <Target Name="ENSdkInstallEasiPlugin" />
+  <Target Name="_ENSdkPrepareForDebugee" />
+  <Target Name="_ENSdkInstallEasiPlugin" />
+</Project>
