@@ -1,0 +1,33 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using WF=System.Windows.Forms;
+namespace PhotoTutor {
+ internal static class SymbolIntegrityChecks {
+  static IEnumerable<WF.Control> All(WF.Control root){foreach(WF.Control child in root.Controls){yield return child;foreach(var c in All(child))yield return c;}}
+  sealed class Offscreen:WF.Form {protected override bool ShowWithoutActivation=>true;internal Offscreen(){ShowInTaskbar=false;StartPosition=WF.FormStartPosition.Manual;Location=new Point(-12000,-12000);}}
+  internal static int Run(string folder){Directory.CreateDirectory(folder);Settings.IsolatedTestRoot=Path.Combine(folder,"isolated-runtime");int failed=0;var rows=new List<object>();void Check(string name,Action action){try{action();rows.Add(new{name,passed=true});}catch(Exception e){failed++;rows.Add(new{name,passed=false,error=e.ToString()});}}
+   var fixtures=JArray.Parse(File.ReadAllText(Path.Combine(folder,"符号结构检查.json")));string Hash(string formula){using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(formula))).Replace("-","").ToLowerInvariant();}
+   ScienceSupport.CloudMath.TestRenderer=(formula,size)=>{string file=Path.Combine(folder,"formula_"+Hash(formula)+".png");return File.Exists(file)?Task.FromResult(File.ReadAllBytes(file)):Task.FromException<byte[]>(new IOException("unsupported offline fixture"));};
+   try{
+    Check("multi-letter vector layout expands the complete identifier while preserving single-letter accents",()=>{if(ScienceSupport.CloudMath.LayoutSource(@"\vec{AB}")!=@"\overrightarrow{AB}"||ScienceSupport.CloudMath.LayoutSource(@"\vec{MF_{1}}")!=@"\overrightarrow{MF_{1}}"||ScienceSupport.CloudMath.LayoutSource(@"\vec{a}")!=@"\vec{a}")throw new Exception("vector scope changed");});
+    foreach(var item in fixtures){string name=(string)item["name"]!,formula=(string)item["formula"]!;foreach(int width in new[]{1500,380})foreach(bool inline in new[]{true,false})Check(name+" / "+width+" / "+(inline?"inline":"block"),()=>{using(var panel=new LessonPanel{Width=width,Height=850}){panel.Display(inline?"依据原式 $"+formula+"$ 核对符号":"$$"+formula+"$$",true);if(All(panel).OfType<WF.Label>().Any(l=>l.ForeColor==Color.DarkRed))throw new Exception("valid fixture unexpectedly failed");if(!All(panel).Any(c=>c is WF.PictureBox||c is InlineMathRow))throw new Exception("not a formula display");}});}
+    foreach(string formula in new[]{@"\ce{CaCO3 v}",@"\ce{CH3^.}",@"\ce{NH4+}",@"\ce{2H2O2 ->[MnO2] 2H2O + O2 ^}",@"\chemfig{C-C}",@"\begin{tikzpicture}x\end{tikzpicture}",@"\vec{AB}"})foreach(int width in new[]{380,1500})foreach(bool inline in new[]{true,false})Check("unavailable layout retains exact source / "+formula+" / "+width+" / "+inline,()=>{var renderer=ScienceSupport.CloudMath.TestRenderer;ScienceSupport.CloudMath.TestRenderer=(_,__)=>Task.FromException<byte[]>(new IOException("offline fixture"));try{using(var panel=new LessonPanel{Width=width,Height=850}){panel.Display(inline?"原式 $"+formula+"$":"$$"+formula+"$$",true);if(!All(panel).OfType<WF.Label>().Any(l=>l.Text.Contains(formula)&&l.Text.Contains("需核对")&&l.ForeColor==Color.DarkRed))throw new Exception("silent source replacement");}}finally{ScienceSupport.CloudMath.TestRenderer=renderer;}});
+    foreach(string value in new[]{"𝐯","𝐀","x⃗","👩🏽‍🏫","🇨🇳"})foreach(int width in new[]{300,22})Check("whole Unicode text element / "+value+" / "+width,()=>{using(var font=new Font("Microsoft YaHei",24))using(var row=new InlineMathRow(width,font,value)){row.AddText(value);row.Reflow();var runs=(IList)typeof(InlineMathRow).GetField("runs",BindingFlags.Instance|BindingFlags.NonPublic)!.GetValue(row)!;if(runs.Count!=1||(string)runs[0]!.GetType().GetField("Text",BindingFlags.Instance|BindingFlags.NonPublic)!.GetValue(runs[0])! !=value)throw new Exception("grapheme split");}});
+    Check("printed plain units, DNA, sex symbols and mathematical Unicode retain exact text",()=>{string text="𝐯 𝐀 x⃗；DNA 链方向：5′→3′；杂交亲本：♀ × ♂\nμ=0.2，m=2 kg，u=2 m/s；ν=5 Hz，v=2 m/s\n20 ℃ = 293.15 K；另写作 20 °C";using(var panel=new LessonPanel{Width=1450,Height=600}){panel.Display(text,true);using(var form=new Offscreen{Width=1500,Height=700}){form.Controls.Add(panel);form.Show();WF.Application.DoEvents();using(var image=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(image,new Rectangle(Point.Empty,form.Size));image.Save(Path.Combine(folder,"普通文本_Unicode_单位.png"));}form.Close();}}});
+    Check("actual Windows control chemical layout and multi-letter vector inspection sheet",()=>{using(var form=new Offscreen{Width=1600,Height=1100})using(var panel=new LessonPanel{Dock=WF.DockStyle.Fill}){form.Controls.Add(panel);panel.Display("# 化学语义：沉淀、自由基、电荷、条件\n沉淀 $\\ce{CaCO3 v}$\n自由基 $\\ce{CH3^.}$ 与 $\\ce{Cl^.}$\n铵根 $\\ce{NH4+}$\n反应 $\\ce{2H2O2 ->[MnO2] 2H2O + O2 ^}$\n# 多字母箭头分别检查\n多字母vec整体箭头 $\\vec{AB}$\n长箭头 $\\overrightarrow{AB}$",true);form.Show();WF.Application.DoEvents();using(var image=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(image,new Rectangle(Point.Empty,form.Size));image.Save(Path.Combine(folder,"化学与多字母箭头_实际控件.png"));}form.Close();}});
+    Check("streaming keeps one light text control and renders formulas only on completion",()=>{using(var panel=new LessonPanel{Width=1200,Height=900}){string text=string.Join("\n",Enumerable.Repeat("步骤 $x_1^2+x_2^2$ 与根号 $\\sqrt{x+1}$。",100));var clock=System.Diagnostics.Stopwatch.StartNew();for(int i=1;i<=20;i++){panel.Display(text.Substring(0,text.Length*i/20),true,false,true);if(panel.Controls.Count!=1)throw new Exception("stream increment rebuilt multiple controls");}double receiving=clock.Elapsed.TotalMilliseconds;if(panel.Controls.Count!=1||All(panel).Any(c=>c is WF.PictureBox||c is InlineMathRow))throw new Exception("expensive streaming rebuild");clock.Restart();panel.Display(text,true);double complete=clock.Elapsed.TotalMilliseconds;File.WriteAllText(Path.Combine(folder,"流式排版_开发机记录.json"),JsonConvert.SerializeObject(new{receivingTotalMs=receiving,increments=20,completionMs=complete,lines=100,schoolHardware=false,measurement="developer control-render time, not real typing latency"}));}});
+   }finally{ScienceSupport.CloudMath.TestRenderer=null;}
+   File.WriteAllText(Path.Combine(folder,"原生符号检查.json"),JsonConvert.SerializeObject(new{failed,checks=rows,paidRequests=0,modelAnswerValidation=false,layoutSource="actual Windows controls with offline formula worker fixtures"},Formatting.Indented));return failed==0?0:1;
+  }
+ }
+}
