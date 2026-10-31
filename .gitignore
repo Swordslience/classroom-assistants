@@ -1,0 +1,37 @@
+# Build products / dependencies
+**/bin/
+**/obj/
+**/installer/
+**/artifacts/
+**/node_modules/
+.vs/
+.idea/
+*.user
+*.suo
+*.log
+*.dmp
+*.pfx
+*.p12
+*.pem
+*.key
+*.protected
+# Local identities, API keys and deployments
+.env
+.env.*
+!.env.example
+**/connection.json
+**/settings.json
+**/remote.local.json
+**/classroom-deployment.json
+**/cloudbaserc.json
+**/接口配置_仅自用.json
+**/.local-data/
+**/.update-cache/
+**/更新回退/
+**/data/
+**/logs/
+**/updates/
+**/Properties/launchSettings.json
+artifacts/
+
+/MobileRemote/

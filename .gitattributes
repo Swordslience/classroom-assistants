@@ -1,0 +1,6 @@
+* text=auto
+*.zip -text
+*.otf -text
+*.ttf -text
+*.woff -text
+*.woff2 -text
